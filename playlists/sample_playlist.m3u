@@ -1,0 +1,8 @@
+#EXTM3U
+#PLAYLIST:Sample BPM Playlist - Upbeat (121-140 BPM)
+#EXTINF:180,Artist Name - Song Title
+/Users/username/Music/Artist Name/Album Name/01 Song Title.mp3
+#EXTINF:210,Another Artist - Another Song
+/Users/username/Music/Another Artist/Another Album/02 Another Song.mp3
+#EXTINF:195,Third Artist - Third Song
+/Users/username/Music/Third Artist/Third Album/03 Third Song.mp3
