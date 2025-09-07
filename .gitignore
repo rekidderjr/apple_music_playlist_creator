@@ -224,3 +224,7 @@ data/Local_Library.xml
 # Generated playlist files
 playlists/*
 !playlists/sample_playlist.m3u
+
+# Security scan results
+bandit-results.json
+safety-results.json
