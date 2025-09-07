@@ -32,6 +32,7 @@ pip-audit>=2.6.0
 pip-tools>=7.3.0
 
 # Development Utilities
-ipython>=8.15.0
+ipython>=7.16.0,<8.0.0; python_version<"3.9"
+ipython>=8.15.0; python_version>="3.9"
 jupyter>=1.0.0
 tox>=4.11.0
