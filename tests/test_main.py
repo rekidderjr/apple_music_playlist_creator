@@ -16,7 +16,7 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from apple_music_playlist_creator.main import PlaylistCreator
+from apple_music_playlist_creator.main import PlaylistCreator, main
 
 
 class TestPlaylistCreator:
@@ -257,3 +257,21 @@ def test_parametrized_processing(input_data: Any, expected_type: str, expected_c
     assert result["status"] == "success"
     assert result["input_type"] == expected_type
     assert result["processed_count"] == expected_count
+
+class TestMainFunction:
+    """Test suite for the main function."""
+
+    def test_main_function_success(self) -> None:
+        """Test main function executes successfully."""
+        # Just run main function - it should complete without error
+        main()
+
+    @patch("apple_music_playlist_creator.main.PlaylistCreator")
+    def test_main_function_exception_handling(self, mock_playlist_creator: MagicMock) -> None:
+        """Test main function handles exceptions properly."""
+        # Make PlaylistCreator raise an exception
+        mock_playlist_creator.side_effect = Exception("Test error")
+        
+        # Run main function and expect it to raise
+        with pytest.raises(Exception, match="Test error"):
+            main()
