@@ -106,7 +106,7 @@ class TestPlaylistCreator:
         assert set(status["config_keys"]) == {"debug", "timeout"}
         assert "timestamp" in status
 
-    @patch("your_package.main.datetime")
+    @patch("datetime.datetime")
     def test_get_timestamp_mocked(self, mock_datetime: MagicMock) -> None:
         """Test timestamp generation with mocked datetime."""
         mock_datetime.now.return_value.isoformat.return_value = "2023-01-01T12:00:00"
