@@ -15,6 +15,7 @@ A tool to create and manage Apple Music playlists programmatically, with advance
 - **Random Shuffling**: Randomly sorts tracks within playlists to avoid artist/album grouping
 - **Library Statistics**: Provides detailed analysis of your music collection
 - **Playlist Generation**: Creates .m3u playlist files compatible with Apple Music, iTunes, and other players
+- **iTunes Playlist Export Processing**: Converts exported iTunes playlists to deduplicated M3U format
 
 ### New Enhanced Features
 - **Library Data Analysis**: Diagnoses iTunes XML issues and missing file paths
@@ -107,6 +108,26 @@ pre-commit install
 # Run the complete setup and music sorter
 ./run_music_sorter.sh
 ```
+
+### iTunes Playlist Export Processing
+
+```bash
+# Process exported iTunes playlists (deduplicates and randomizes)
+python3 apple_exported_playlist_deduplicator.py
+```
+
+This will:
+1. Process all `.txt` files in `data/exported_playlist/` directory
+2. Parse iTunes playlist export format (UTF-16, tab-delimited)
+3. Remove duplicate tracks based on artist-song combinations
+4. Randomly shuffle track order
+5. Create deduplicated M3U playlists in `playlists/` directory
+
+#### How to Export iTunes Playlists
+1. In iTunes/Music app, select a playlist
+2. Go to **File** → **Export Playlist...**
+3. Choose **Text Files** format and save as `.txt`
+4. Place the exported file in `data/exported_playlist/` directory
 
 ### Manual Usage
 
@@ -212,8 +233,10 @@ apple-music-playlist-creator/
 │   └── apple_music_playlist_creator/
 ├── tests/                     # Test files
 ├── data/                      # iTunes/Apple Music library XML files
-│   └── Library.xml           # Your exported iTunes library (required)
+│   ├── Library.xml           # Your exported iTunes library (required)
+│   └── exported_playlist/    # iTunes playlist exports (.txt files)
 ├── music_sorter.py            # Enhanced music library sorting script
+├── apple_exported_playlist_deduplicator.py  # iTunes playlist processor
 ├── run_music_sorter.sh        # Quick start script
 ├── playlists/                 # Generated playlist files
 │   └── sample_playlist.m3u   # Example output format
