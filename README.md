@@ -8,13 +8,20 @@ A tool to create and manage Apple Music playlists programmatically, with advance
 
 ## Features
 
-### Music Library Analysis & Sorting
+### Enhanced Music Library Analysis & Sorting
 - **BPM Sorting**: Automatically categorizes tracks by tempo ranges (Slow, Moderate, Upbeat, Fast, Very Fast, Extreme)
 - **Genre Sorting**: Creates playlists based on music genres from your library
 - **Duplicate Removal**: Automatically removes duplicate tracks from playlists (same artist-song combinations)
 - **Random Shuffling**: Randomly sorts tracks within playlists to avoid artist/album grouping
 - **Library Statistics**: Provides detailed analysis of your music collection
 - **Playlist Generation**: Creates .m3u playlist files compatible with Apple Music, iTunes, and other players
+
+### New Enhanced Features
+- **Library Data Analysis**: Diagnoses iTunes XML issues and missing file paths
+- **Enhanced Debugging**: Detailed feedback on playlist creation with file path validation
+- **Missing File Detection**: Identifies tracks with invalid or missing file locations
+- **Improved Error Handling**: Better error messages and troubleshooting guidance
+- **File Path Validation**: Checks if music files actually exist on disk
 
 ### Current Sorting Capabilities
 **BPM (Beats Per Minute)**: Sorts tracks into tempo-based playlists  
@@ -40,6 +47,14 @@ This tool requires your iTunes/Apple Music library XML file to be placed in the 
 
 **Note:** The exported XML contains metadata like BPM, Genre, Artist, Album, but does **not** include musical key information. Musical key detection would require audio analysis, which is beyond the scope of this tool.
 
+### Troubleshooting "Empty Playlist" Issues
+If you're getting empty playlists, the enhanced version now provides detailed diagnostics:
+
+- **Library Analysis**: Run the tool to see how many tracks have valid file paths
+- **File Path Validation**: Checks if music files actually exist on your system
+- **Missing Location Data**: Identifies if iTunes XML lacks file location information
+- **Detailed Reporting**: Shows exactly how many tracks were written vs. skipped
+
 ### Additional Features
 - **Security First**: Comprehensive security scanning and compliance
 - **Quality Assured**: Automated code quality checks and testing
@@ -47,9 +62,9 @@ This tool requires your iTunes/Apple Music library XML file to be placed in the 
 
 ## Requirements
 
-- Python 3.8 or higher
+- Python 3.8 or higher (tested with Python 3.11.13)
 - iTunes/Apple Music library XML file
-- Additional requirements listed in `requirements.txt`
+- Additional requirements listed in `requirements.txt` (uses Python standard library only)
 
 ## Installation
 
@@ -64,11 +79,14 @@ cd apple-music-playlist-creator
 python3 -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
-# Install dependencies
-pip install -r requirements.txt
-
-# Install development dependencies (optional)
+# Install dependencies (development tools only - no runtime dependencies)
 pip install -r requirements-dev.txt
+
+# Install pre-commit hooks (optional)
+pre-commit install
+
+# Run compliance check (optional)
+./customer-compliance-check.sh
 ```
 
 ### Development Setup
@@ -99,11 +117,42 @@ python3 music_sorter.py
 
 This will:
 1. Parse your iTunes/Apple Music library XML file
-2. Analyze your music collection by BPM and genre
+2. **Analyze your music collection** for file path issues
 3. Generate playlist files in the `playlists/` directory
 4. Remove duplicate tracks from playlists
 5. Randomly shuffle tracks to avoid artist/album grouping
-6. Display detailed statistics about your library
+6. **Display detailed statistics** about your library and any issues found
+7. **Provide troubleshooting guidance** if problems are detected
+
+### Enhanced Output Example
+
+```
+🎵 Starting Apple Music Playlist Creator...
+📖 Parsing iTunes library...
+🔍 Analyzing library data...
+
+=== LIBRARY DATA ANALYSIS ===
+Total tracks: 49,396
+Tracks with location data: 45,230
+Tracks with file:// URLs: 45,230
+
+Sample locations (first 5 tracks):
+  1. Artist Name - Song Title
+     Path: /Users/username/Music/Artist/Album/Song.mp3
+     Exists: ✅
+  2. Another Artist - Another Song
+     Path: /Users/username/Music/Another/Album/Song.mp3
+     Exists: ✅
+
+📊 Generating library report...
+🎼 Creating playlists...
+
+Created playlist: playlists/BPM_Upbeat_121-140_BPM.m3u
+  - 1,234 tracks with valid paths
+  - 12 tracks skipped (missing/invalid paths)
+
+✅ Complete! Check the 'playlists/' directory for your new playlists.
+```
 
 ### Basic API Usage
 
@@ -115,25 +164,6 @@ creator = PlaylistCreator()
 
 # Create a new playlist
 playlist = creator.create_playlist("My Awesome Playlist")
-```
-
-### Example Output
-
-```
-=== MUSIC LIBRARY ANALYSIS ===
-Total tracks: 49,396
-
---- BPM Distribution ---
-Fast (141-160 BPM): 6 tracks
-Upbeat (121-140 BPM): 19 tracks
-Medium (101-120 BPM): 9 tracks
-...
-
---- Top Genres ---
-Rock: 9,932 tracks
-Pop: 7,382 tracks
-Country & Folk: 6,757 tracks
-...
 ```
 
 ## Testing
@@ -166,8 +196,8 @@ pylint src/
 mypy src/
 
 # Security scanning
-bandit -r src/
-safety check
+bandit -r src/ music_sorter.py
+safety scan
 
 # Run all quality checks
 ./customer-compliance-check.sh
@@ -183,10 +213,11 @@ apple-music-playlist-creator/
 ├── tests/                     # Test files
 ├── data/                      # iTunes/Apple Music library XML files
 │   └── Library.xml           # Your exported iTunes library (required)
-├── music_sorter.py            # Music library sorting script
+├── music_sorter.py            # Enhanced music library sorting script
 ├── run_music_sorter.sh        # Quick start script
 ├── playlists/                 # Generated playlist files
-├── requirements.txt           # Production dependencies
+│   └── sample_playlist.m3u   # Example output format
+├── requirements.txt           # Production dependencies (none - uses stdlib)
 ├── requirements-dev.txt       # Development dependencies
 └── README.md                 # This file
 ```
@@ -195,7 +226,31 @@ apple-music-playlist-creator/
 
 - **Input**: iTunes/Apple Music Library XML files
 - **Output**: M3U playlist files (compatible with most music players)
-- **Metadata**: BPM, Genre, Artist, Album, Track Name, Duration
+- **Metadata**: BPM, Genre, Artist, Album, Track Name, Duration, File Paths
+
+## Security & Compliance
+
+This project includes comprehensive security measures:
+- ✅ **Bandit security scanning** - No HIGH/CRITICAL vulnerabilities
+- ✅ **Code quality standards** - Black, isort, flake8, pylint
+- ✅ **Automated testing** - pytest with coverage
+- ✅ **Pre-commit hooks** - Automated quality checks
+- ✅ **GitHub Actions** - CI/CD with security scanning
+
+## Troubleshooting
+
+### Empty Playlists
+If you're getting empty playlists, the tool now provides detailed diagnostics:
+1. Run `python3 music_sorter.py` to see the library analysis
+2. Check if tracks have valid file locations in the iTunes XML
+3. Verify that music files haven't been moved or deleted
+4. Ensure the Library.xml is from the same computer where music files are stored
+
+### Missing File Paths
+The enhanced version will show you exactly what's wrong:
+- How many tracks have location data
+- Sample file paths and whether they exist
+- Specific guidance on re-exporting your iTunes library
 
 ## Planned Features
 
