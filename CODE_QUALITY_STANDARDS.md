@@ -2,21 +2,24 @@
 
 This document outlines the code quality standards and compliance requirements for this project.
 
-## ##  Overview
+## Overview
 
 This project maintains high code quality through automated checks, comprehensive testing, and security scanning. All code must pass these standards before being merged.
 
-## ##  Quality Requirements
+## Quality Requirements
 
 ### Code Formatting
 - **Black**: All Python code must be formatted with Black
 - **isort**: Import statements must be properly sorted
-- **Line Length**: Maximum 127 characters (configurable in setup.cfg)
+- **Line Length**: Maximum 79 characters (configurable in setup.cfg)
+- **No Emojis**: Emojis are not permitted in code files, comments, or documentation
 
 ### Code Quality
 - **flake8**: Must pass linting with no critical errors
 - **pylint**: Minimum score of 8.0/10
 - **mypy**: Type hints required for public functions
+- **Docstrings**: Required for all public functions, classes, and modules (Google/NumPy style)
+- **pydocstyle**: Docstring conventions must be followed
 
 ### Security
 - **Bandit**: No high-severity security issues
@@ -29,7 +32,7 @@ This project maintains high code quality through automated checks, comprehensive
 - **pytest**: All tests must pass
 - **Multiple Python versions**: Support Python 3.8-3.12
 
-## 🔧 Development Setup
+##  Development Setup
 
 ### Prerequisites
 ```bash
@@ -87,7 +90,7 @@ pytest --cov=. --cov-report=html
 open htmlcov/index.html
 ```
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 project/
@@ -149,7 +152,7 @@ disable = "C0330, C0326"
 max-line-length = "127"
 ```
 
-## ##  CI/CD Pipeline
+## CI/CD Pipeline
 
 ### Automated Checks
 1. **Code Quality**: Black, isort, flake8, pylint, mypy
@@ -168,7 +171,7 @@ max-line-length = "127"
 - Test coverage reports
 - Dependency vulnerability reports
 
-## 🛡️ Security Standards
+##  Security Standards
 
 ### Secret Management
 - No hardcoded secrets in code
@@ -185,7 +188,7 @@ max-line-length = "127"
 - Proper error handling
 - Secure coding practices
 
-## ##  Quality Metrics
+## Quality Metrics
 
 ### Required Thresholds
 - **Test Coverage**: ≥ 80%
@@ -198,7 +201,7 @@ max-line-length = "127"
 - Coverage reports uploaded to Codecov
 - Security alerts via GitHub Security tab
 
-## 🔄 Development Workflow
+##  Development Workflow
 
 ### Before Committing
 1. Run `black .` and `isort .`
@@ -218,12 +221,12 @@ max-line-length = "127"
 3. Tag release with semantic versioning
 4. Automated deployment via GitHub Actions
 
-## 🆘 Troubleshooting
+##  Troubleshooting
 
 ### Common Issues
 
 **Black formatting conflicts with flake8**
-- Ensure both tools use same line length (127)
+- Ensure both tools use same line length (79)
 - Use `extend-ignore = E203, W503` in flake8 config
 
 **Import sorting issues**
@@ -243,7 +246,7 @@ max-line-length = "127"
 - Review tool documentation
 - Ask in team chat or create issue
 
-## 📈 Continuous Improvement
+##  Continuous Improvement
 
 ### Regular Reviews
 - Monthly review of quality metrics

@@ -34,13 +34,26 @@ repos:
     rev: 1.7.5
     hooks:
       - id: bandit
-        args: ['-r', '.', '-ll']
+        args: ['-ll']
+        additional_dependencies: ['pbr']
 
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: v1.5.1
     hooks:
       - id: mypy
         additional_dependencies: [types-requests]
+
+  - repo: https://github.com/pycqa/pydocstyle
+    rev: 6.3.0
+    hooks:
+      - id: pydocstyle
+        args: [--convention=google]
+
+  - repo: https://github.com/shellcheck-py/shellcheck-py
+    rev: v0.9.0.6
+    hooks:
+      - id: shellcheck
+        args: [--severity=warning]
 
   - repo: https://github.com/trufflesecurity/trufflehog
     rev: v3.63.2
@@ -50,4 +63,4 @@ repos:
         description: Detect secrets in your data.
         entry: bash -c 'trufflehog git file://. --since-commit HEAD --only-verified --fail'
         language: system
-        stages: ["commit", "push"]
+        stages: ["pre-commit", "pre-push"]

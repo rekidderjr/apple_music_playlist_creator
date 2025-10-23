@@ -2,7 +2,6 @@
 
 # Customer Compliance Check Script
 # Ensures code meets enterprise customer compliance requirements
-# Author: rekidderjr
 
 set -e
 
@@ -109,8 +108,8 @@ if ! command_exists safety; then
     python3 -m pip install -q safety
 fi
 
-run_check "Bandit security scan" "bandit -r src/ music_sorter.py -ll" true
-run_check "Safety vulnerability check" "safety scan --short-report" true
+run_check "Bandit security scan" "bandit -r . -ll" true
+run_check "Safety vulnerability check" "safety check" true
 
 # Check for common security issues
 run_check "No hardcoded passwords" "! grep -r -i 'password.*=' --include='*.py' . || true" true
@@ -169,7 +168,7 @@ echo -e "Passed: ${GREEN}$PASSED_CHECKS${NC}"
 echo -e "Failed: ${RED}$FAILED_CHECKS${NC}"
 
 if [ $FAILED_CHECKS -eq 0 ]; then
-    echo -e "\n${GREEN}🎉 All compliance checks passed!${NC}"
+    echo -e "\n${GREEN} All compliance checks passed!${NC}"
     echo -e "${GREEN}Your code meets customer compliance requirements.${NC}"
     exit 0
 else
